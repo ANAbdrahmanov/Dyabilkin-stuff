@@ -176,7 +176,7 @@ public:
 	}
 };
 
-int main() {
+int main() {      
 	int n; cin>>n;
 	bool** a = CreateTree(n);
 	IsoTree first(n,a);
