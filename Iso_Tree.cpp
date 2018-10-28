@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>     //windows 1251
 #include <string>
 #include <list>
 #include <algorithm>
@@ -24,25 +24,25 @@ public:
 			size_ = n;
 		}
 	}
-	Bracket operator[](int index){              
+	Bracket operator[](int index){
 		return tuple_[index];
 	}
 };
 
-bool** CreateTree(int n) { 
-	bool** a = new bool*[n]; 
-	srand(time(NULL)); 
-	int j; 
-	a[0] = new bool[n]; 
-	for (int k = 0; k < n; a[0][k++] = 0); 
-	for (int i = 1; i < n; i++) { 
-		a[i] = new bool[n]; 
-		for (int k = 0; k < n; a[i][k++] = 0); 
-		j = rand() % i; 
-		a[i][j] = 1; 
-		a[j][i] = 1; 
+bool** CreateTree(int n) {
+	bool** a = new bool*[n];
+	srand(time(NULL));
+	int j;
+	a[0] = new bool[n];
+	for (int k = 0; k < n; a[0][k++] = 0);
+	for (int i = 1; i < n; i++) {
+		a[i] = new bool[n];
+		for (int k = 0; k < n; a[i][k++] = 0);
+		j = rand() % i;
+		a[i][j] = 1;
+		a[j][i] = 1;
 	}
-	return a; 
+	return a;
 };
 
 bool Less(Bracket a, Bracket b){
@@ -50,14 +50,14 @@ bool Less(Bracket a, Bracket b){
 			return true;
 		} else if((!a.pure_ && b.pure_) || (a.pure_ && b.pure_)){
 			return false;
-		} else if(a.size_ == b.size_){ 
+		} else if(a.size_ == b.size_){
 			int i = 0;
 			for(; (i < a.size_) && !(Less(a[i], b[i]) || Less(b[i],a[i])); i++);  //проверка на равенство содержимого
 			if(i == a.size_)
 				return false;
-			else 
+			else
 				return Less(a[i],b[i]);
-		} else 
+		} else
 			return a.size_ < b.size_;
 }
 
@@ -68,7 +68,7 @@ int center(int n, bool**& tree, bool& im){
 		for(int j = 0; j < n; j++){
 			copy[i][j] = tree[i][j];
 		}
-	} 
+	}
 	list< pair<int,bool> > leaf;        // список помеченных невисячих вершин
 	for(int i = 0; i < n; i++){
 		leaf.push_front(pair<int,bool>(i,false));
@@ -119,12 +119,12 @@ int center(int n, bool**& tree, bool& im){
 		im = false;
 		return leaf.front().first;
 	}
-} 
+}
 
 class IsoTree{
-	bool imaginary_;       //если центр искусственно добавленный
+	bool imaginary_;       //если центр ребро добавляется мнимая вершина, у кода сменяется знак
 	Bracket tree_;
-	
+
 	Bracket Build(int n, bool** tree, int x){ 		 //строим структуру будущего дерева
 		int count = 0;
 		for(int i = 0; i < n; i++)
@@ -143,8 +143,8 @@ class IsoTree{
 		}
 		return Bracket(count,tuple);
 	}
-	
-	void code(string& _code, Bracket cell){          //кодируем имеющуюся структуру
+
+	void code(string& _code, Bracket cell){          //генерим уникальный код
 		if(cell.pure_) _code+= "0";
 		else{
 			_code += "(";
@@ -155,7 +155,7 @@ class IsoTree{
 			_code+=")";
 		}
 	}
-	void Bracket_sort(Bracket* tree, int size){                 //сортируем каждую подструктуру в структуре,а затем ее и саму
+	void Bracket_sort(Bracket* tree, int size){                 //рекурсивно сортируем
 		if(tree == 0) return;
 		else{
 			for(int i = 0; i < size; i++){
@@ -164,6 +164,7 @@ class IsoTree{
 			sort(tree, tree + size, Less);
 		}
 	}
+
 public:
 	string treeCode_;
 	IsoTree(int n, bool** treeMat){
@@ -176,7 +177,7 @@ public:
 	}
 };
 
-int main() {      
+int main() {
 	int n; cin>>n;
 	bool** a = CreateTree(n);
 	IsoTree first(n,a);
